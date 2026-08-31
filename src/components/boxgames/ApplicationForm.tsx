@@ -1,6 +1,6 @@
 "use client";
 
-import { Crown, Flame, Gem, Loader2 } from "lucide-react";
+import { Check, Crown, Flame, Gem, Loader2 } from "lucide-react";
 import { FormEvent, useState, useSyncExternalStore } from "react";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 
@@ -10,6 +10,7 @@ interface FormErrors {
   username?: string;
   target?: string;
   date?: string;
+  submit?: string;
 }
 
 const TARGET_OPTIONS: {
@@ -34,6 +35,11 @@ function getTodayString(): string {
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function normalizeUsername(value: string): string {
+  const trimmed = value.trim();
+  return trimmed.startsWith("@") ? trimmed.slice(1) : trimmed;
 }
 
 function validateUsername(value: string): string | undefined {
@@ -90,43 +96,114 @@ export function ApplicationForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (isSubmitting || isSuccess) return;
+
     const nextErrors = validateForm();
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) return;
 
     setIsSubmitting(true);
+    setErrors((prev) => ({ ...prev, submit: undefined }));
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const payload = {
+        username: normalizeUsername(username),
+        target,
+        available_date: date,
+      };
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      console.info("[Box Games] Submitting application", payload);
+
+      const response = await fetch("/api/box-games/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      let result: {
+        success?: boolean;
+        error?: {
+          message?: string;
+          details?: string;
+          hint?: string;
+          code?: string;
+        };
+      } = {};
+
+      try {
+        result = await response.json();
+      } catch (parseError) {
+        console.error("[Box Games] Failed to parse API response", {
+          status: response.status,
+          parseError,
+        });
+        setErrors((prev) => ({
+          ...prev,
+          submit:
+            "Something went wrong while submitting your application. Please try again.",
+        }));
+        return;
+      }
+
+      if (!response.ok || result.success !== true) {
+        console.error("[Box Games] API submit failed", {
+          status: response.status,
+          supabaseError: result.error,
+          payload,
+        });
+        setErrors((prev) => ({
+          ...prev,
+          submit:
+            "Something went wrong while submitting your application. Please try again.",
+        }));
+        return;
+      }
+
+      console.info("[Box Games] Application saved successfully", result);
+      setIsSuccess(true);
+    } catch (caught) {
+      console.error("[Box Games] Submit error", {
+        error: caught,
+        message: caught instanceof Error ? caught.message : String(caught),
+        stack: caught instanceof Error ? caught.stack : undefined,
+      });
+      setErrors((prev) => ({
+        ...prev,
+        submit:
+          "Unable to connect to the application service. Please check your connection and try again.",
+      }));
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
-  if (isSuccess) {
-    return (
-      <div
-        className="boxgames-form-card boxgames-success-card w-full max-w-full rounded-2xl p-8 text-center sm:p-10"
-        role="status"
-        aria-live="polite"
-      >
-        <h2 className="text-2xl font-bold text-white sm:text-3xl">
-          Application Received 🔥
-        </h2>
-        <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
-          Thank you for applying to join the Ghanaba Joey Box Games. We&apos;ll
-          review your application and contact you if selected.
-        </p>
-      </div>
-    );
-  }
+  const isLocked = isSubmitting || isSuccess;
 
   return (
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="boxgames-form-card w-full max-w-full min-w-0 space-y-6 rounded-2xl p-6 sm:space-y-7 sm:p-7"
+      className={`boxgames-form-card w-full max-w-full min-w-0 space-y-6 rounded-2xl p-6 sm:space-y-7 sm:p-7 ${
+        isSuccess ? "boxgames-success-card" : ""
+      }`}
     >
+      {isSuccess && (
+        <div
+          className="boxgames-success-banner rounded-xl px-4 py-5 text-center sm:px-6 sm:py-6"
+          role="status"
+          aria-live="polite"
+        >
+          <p className="text-lg font-bold tracking-tight text-white sm:text-xl">
+            Application submitted successfully! 🎉
+          </p>
+          <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-zinc-400">
+            Thank you for applying to join the Ghanaba Joey Box Games. We&apos;ll
+            review your application and contact you if selected.
+          </p>
+        </div>
+      )}
+
       <div>
         <label
           htmlFor="tiktok-username"
@@ -138,6 +215,7 @@ export function ApplicationForm() {
           id="tiktok-username"
           type="text"
           value={username}
+          disabled={isLocked}
           onChange={(e) => {
             setUsername(e.target.value);
             if (errors.username) {
@@ -172,6 +250,7 @@ export function ApplicationForm() {
               <button
                 key={option.value}
                 type="button"
+                disabled={isLocked}
                 onClick={() => {
                   setTarget(option.value);
                   if (errors.target) {
@@ -207,6 +286,7 @@ export function ApplicationForm() {
           id="available-date"
           type="date"
           value={date}
+          disabled={isLocked}
           min={minDate || undefined}
           onChange={(e) => {
             setDate(e.target.value);
@@ -229,14 +309,25 @@ export function ApplicationForm() {
         )}
       </div>
 
+      {errors.submit && (
+        <p className="text-sm text-red-400" role="alert">
+          {errors.submit}
+        </p>
+      )}
+
       <PremiumButton
         type="submit"
         variant="purple"
-        disabled={isSubmitting}
-        showArrow={!isSubmitting}
+        disabled={isLocked}
+        showArrow={!isSubmitting && !isSuccess}
         className="boxgames-submit-btn py-3.5 text-base"
       >
-        {isSubmitting ? (
+        {isSuccess ? (
+          <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap tracking-[0.18em] uppercase">
+            <Check className="h-5 w-5 shrink-0" aria-hidden="true" />
+            APPLICATION SUBMITTED
+          </span>
+        ) : isSubmitting ? (
           <span className="inline-flex items-center gap-2">
             <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
             Submitting...
