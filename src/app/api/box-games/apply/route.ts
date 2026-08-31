@@ -8,11 +8,14 @@ import {
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  console.info("[Box Games API] Request received");
+
   let body: BoxGameApplicationInsert;
 
   try {
     body = (await request.json()) as BoxGameApplicationInsert;
   } catch {
+    console.warn("[Box Games API] Validation failed: invalid JSON body");
     return NextResponse.json(
       { error: { message: "Invalid JSON body." } },
       { status: 400 },
@@ -22,6 +25,11 @@ export async function POST(request: Request) {
   const { username, target, available_date } = body;
 
   if (!username || !target || !available_date) {
+    console.warn("[Box Games API] Validation failed: missing required fields", {
+      hasUsername: Boolean(username),
+      hasTarget: Boolean(target),
+      hasAvailableDate: Boolean(available_date),
+    });
     return NextResponse.json(
       {
         error: {
@@ -32,11 +40,29 @@ export async function POST(request: Request) {
     );
   }
 
+  console.info("[Box Games API] Validation passed", {
+    username,
+    target,
+    available_date,
+  });
+
   try {
+    const supabaseUrlConfigured = Boolean(
+      process.env.NEXT_PUBLIC_SUPABASE_URL?.trim(),
+    );
+    const supabaseKeyConfigured = Boolean(
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim(),
+    );
+
+    console.info("[Box Games API] Supabase env check", {
+      hasUrl: supabaseUrlConfigured,
+      hasAnonKey: supabaseKeyConfigured,
+    });
+
     const supabase = createServerSupabaseClient();
     const payload = { username, target, available_date };
 
-    console.info("[Box Games API] Inserting application", payload);
+    console.info("[Box Games API] Supabase insert starting", payload);
 
     const { error } = await supabase.from("box_game_applications").insert(payload);
 
@@ -47,7 +73,7 @@ export async function POST(request: Request) {
         error.message.includes("Failed to fetch");
 
       const friendlyMessage = isNetworkError
-        ? "Could not reach Supabase. Verify NEXT_PUBLIC_SUPABASE_URL in .env.local matches your exact Project URL from Supabase Dashboard → Project Settings → API."
+        ? "Could not reach Supabase. Verify NEXT_PUBLIC_SUPABASE_URL matches your exact Project URL from Supabase Dashboard → Project Settings → API."
         : error.message;
 
       console.error("[Box Games API] Supabase insert failed", {
@@ -56,7 +82,7 @@ export async function POST(request: Request) {
         hint: error.hint,
         code: error.code,
         payload,
-        friendlyMessage,
+        httpStatus: isNetworkError ? 503 : 400,
       });
 
       return NextResponse.json(
@@ -72,7 +98,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.info("[Box Games API] Application saved successfully");
+    console.info("[Box Games API] Supabase insert succeeded", { payload });
 
     const emailResult = await sendBoxGamesApplicationNotification({
       username,
@@ -94,13 +120,18 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (caught) {
-    console.error("[Box Games API] Unexpected error", caught);
+    const message =
+      caught instanceof Error ? caught.message : "Unexpected server error.";
+
+    console.error("[Box Games API] Unexpected error", {
+      message,
+      name: caught instanceof Error ? caught.name : undefined,
+    });
 
     return NextResponse.json(
       {
         error: {
-          message:
-            caught instanceof Error ? caught.message : "Unexpected server error.",
+          message,
         },
       },
       { status: 500 },

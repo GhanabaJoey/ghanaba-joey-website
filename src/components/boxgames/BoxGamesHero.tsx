@@ -6,16 +6,16 @@ export function BoxGamesHero() {
         aria-hidden="true"
       />
 
-      <p className="relative text-[0.65rem] font-semibold tracking-[0.42em] text-gold/85 uppercase sm:text-xs">
-        Ghanaba Joey
-      </p>
-
-      <h1 className="relative mt-2.5 text-[clamp(1.875rem,3.8vw+0.5rem,2.625rem)] font-bold tracking-tight">
-        <span className="boxgames-title-glow premium-gradient-text">Box Games</span>
+      <h1 className="relative text-[clamp(1.75rem,3.6vw+0.5rem,2.5rem)] font-bold tracking-[0.14em] text-white uppercase">
+        <span className="boxgames-title-glow premium-gradient-text">Official Box Games</span>
       </h1>
 
-      <p className="relative mt-2 text-xs font-semibold tracking-[0.34em] text-fuchsia-300/90 uppercase sm:text-sm">
-        30K • 50K • 100K
+      <p className="relative mx-auto mt-4 max-w-sm text-[clamp(1rem,2vw+0.5rem,1.25rem)] font-semibold leading-snug text-white sm:max-w-md">
+        Have you got what it takes to win?
+      </p>
+
+      <p className="relative mx-auto mt-2.5 max-w-sm text-sm leading-relaxed text-zinc-400 sm:max-w-md sm:text-base">
+        Step into the box, go head-to-head with others, and prove it.
       </p>
 
       <div

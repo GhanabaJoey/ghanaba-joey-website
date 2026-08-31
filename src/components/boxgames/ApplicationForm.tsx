@@ -1,40 +1,37 @@
 "use client";
 
 import { Check, Crown, Flame, Gem, Loader2 } from "lucide-react";
-import { FormEvent, useState, useSyncExternalStore } from "react";
+import { FormEvent, useState } from "react";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 
-type BoxGameTarget = "30K" | "50K" | "100K";
+type SelectableTarget = "30K" | "50K";
 
 interface FormErrors {
   username?: string;
   target?: string;
-  date?: string;
   submit?: string;
 }
 
+const TARGET_DATES: Record<SelectableTarget, string> = {
+  "30K": "2026-09-20",
+  "50K": "2026-09-27",
+};
+
 const TARGET_OPTIONS: {
-  value: BoxGameTarget;
-  label: string;
+  value: SelectableTarget | "100K";
+  dateLabel: string;
   icon: "flame" | "gem" | "crown";
+  selectable: boolean;
 }[] = [
-  { value: "30K", label: "30K Box Game", icon: "flame" },
-  { value: "50K", label: "50K Box Game", icon: "gem" },
-  { value: "100K", label: "100K Box Game", icon: "crown" },
+  { value: "30K", dateLabel: "20 SEPTEMBER", icon: "flame", selectable: true },
+  { value: "50K", dateLabel: "27 SEPTEMBER", icon: "gem", selectable: true },
+  { value: "100K", dateLabel: "COMING SOON", icon: "crown", selectable: false },
 ];
 
 function TargetIcon({ icon }: { icon: "flame" | "gem" | "crown" }) {
-  if (icon === "flame") return <Flame className="mx-auto mb-1.5 h-4 w-4" aria-hidden="true" />;
-  if (icon === "gem") return <Gem className="mx-auto mb-1.5 h-4 w-4" aria-hidden="true" />;
-  return <Crown className="mx-auto mb-1.5 h-4 w-4" aria-hidden="true" />;
-}
-
-function getTodayString(): string {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  if (icon === "flame") return <Flame className="mx-auto mb-1 h-5 w-5 sm:h-4 sm:w-4" aria-hidden="true" />;
+  if (icon === "gem") return <Gem className="mx-auto mb-1 h-5 w-5 sm:h-4 sm:w-4" aria-hidden="true" />;
+  return <Crown className="mx-auto mb-1 h-5 w-5 sm:h-4 sm:w-4" aria-hidden="true" />;
 }
 
 function normalizeUsername(value: string): string {
@@ -57,22 +54,12 @@ function validateUsername(value: string): string | undefined {
   return undefined;
 }
 
-function useTodayString(): string {
-  return useSyncExternalStore(
-    () => () => {},
-    getTodayString,
-    () => "",
-  );
-}
-
 export function ApplicationForm() {
   const [username, setUsername] = useState("");
-  const [target, setTarget] = useState<BoxGameTarget | "">("");
-  const [date, setDate] = useState("");
+  const [target, setTarget] = useState<SelectableTarget | "">("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const minDate = useTodayString();
 
   function validateForm(): FormErrors {
     const nextErrors: FormErrors = {};
@@ -82,12 +69,6 @@ export function ApplicationForm() {
 
     if (!target) {
       nextErrors.target = "Please select a target.";
-    }
-
-    if (!date) {
-      nextErrors.date = "Please select your available date.";
-    } else if (minDate && date < minDate) {
-      nextErrors.date = "Please select a date today or in the future.";
     }
 
     return nextErrors;
@@ -103,14 +84,17 @@ export function ApplicationForm() {
 
     if (Object.keys(nextErrors).length > 0) return;
 
+    const selectedTarget = target as SelectableTarget;
+    const available_date = TARGET_DATES[selectedTarget];
+
     setIsSubmitting(true);
     setErrors((prev) => ({ ...prev, submit: undefined }));
 
     try {
       const payload = {
         username: normalizeUsername(username),
-        target,
-        available_date: date,
+        target: selectedTarget,
+        available_date,
       };
 
       console.info("[Box Games] Submitting application", payload);
@@ -209,7 +193,7 @@ export function ApplicationForm() {
           htmlFor="tiktok-username"
           className="block text-sm font-semibold tracking-wide text-zinc-300 uppercase"
         >
-          TikTok Username
+          Your TikTok Username
         </label>
         <input
           id="tiktok-username"
@@ -243,27 +227,46 @@ export function ApplicationForm() {
         <legend className="block text-sm font-semibold tracking-wide text-zinc-300 uppercase">
           Choose Your Target
         </legend>
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="mt-3 grid grid-cols-1 gap-3 min-[480px]:grid-cols-3">
           {TARGET_OPTIONS.map((option) => {
-            const isSelected = target === option.value;
+            const isSelected = option.selectable && target === option.value;
+            const isUnavailable = !option.selectable;
+
             return (
               <button
                 key={option.value}
                 type="button"
-                disabled={isLocked}
+                disabled={isLocked || isUnavailable}
                 onClick={() => {
+                  if (option.value === "100K") return;
                   setTarget(option.value);
                   if (errors.target) {
                     setErrors((prev) => ({ ...prev, target: undefined }));
                   }
                 }}
                 aria-pressed={isSelected}
-                className={`boxgames-target-option relative rounded-xl border px-2 py-3.5 text-center text-xs font-bold transition-all duration-300 active:scale-[0.98] sm:px-3 sm:text-sm ${
-                  isSelected ? "boxgames-target-selected" : ""
-                }`}
+                aria-disabled={isUnavailable}
+                className={`boxgames-target-option relative min-h-[5.5rem] rounded-xl border px-3 py-4 text-center transition-all duration-300 sm:min-h-0 sm:px-2 sm:py-3.5 ${
+                  isUnavailable
+                    ? "boxgames-target-unavailable cursor-not-allowed"
+                    : "active:scale-[0.98]"
+                } ${isSelected ? "boxgames-target-selected" : ""}`}
               >
                 <TargetIcon icon={option.icon} />
-                {option.label}
+                <span className="block text-base font-bold tracking-wide sm:text-sm">
+                  {option.value}
+                </span>
+                <span
+                  className={`boxgames-target-date mt-1.5 block text-[0.65rem] font-semibold tracking-[0.14em] uppercase sm:mt-1 sm:text-[0.6rem] ${
+                    isUnavailable
+                      ? "text-zinc-500"
+                      : isSelected
+                        ? "text-gold-light/90"
+                        : "text-zinc-400"
+                  }`}
+                >
+                  {option.dateLabel}
+                </span>
               </button>
             );
           })}
@@ -275,40 +278,6 @@ export function ApplicationForm() {
         )}
       </fieldset>
 
-      <div>
-        <label
-          htmlFor="available-date"
-          className="block text-sm font-semibold tracking-wide text-zinc-300 uppercase"
-        >
-          Select Your Available Date
-        </label>
-        <input
-          id="available-date"
-          type="date"
-          value={date}
-          disabled={isLocked}
-          min={minDate || undefined}
-          onChange={(e) => {
-            setDate(e.target.value);
-            if (errors.date) {
-              setErrors((prev) => ({ ...prev, date: undefined }));
-            }
-          }}
-          aria-invalid={!!errors.date}
-          aria-describedby={errors.date ? "date-error" : undefined}
-          className={`boxgames-field mt-3 w-full rounded-xl border bg-black/50 px-4 py-3.5 text-base text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500/40 [color-scheme:dark] ${
-            errors.date
-              ? "border-red-500/60"
-              : "border-white/10 focus:border-gold/40"
-          }`}
-        />
-        {errors.date && (
-          <p id="date-error" className="mt-2 text-sm text-red-400" role="alert">
-            {errors.date}
-          </p>
-        )}
-      </div>
-
       {errors.submit && (
         <p className="text-sm text-red-400" role="alert">
           {errors.submit}
@@ -319,13 +288,13 @@ export function ApplicationForm() {
         type="submit"
         variant="purple"
         disabled={isLocked}
-        showArrow={!isSubmitting && !isSuccess}
-        className="boxgames-submit-btn py-3.5 text-base"
+        showArrow={false}
+        className="boxgames-submit-btn py-4 text-base tracking-[0.12em] sm:text-lg"
       >
         {isSuccess ? (
-          <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap tracking-[0.18em] uppercase">
+          <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap uppercase">
+            Application Submitted
             <Check className="h-5 w-5 shrink-0" aria-hidden="true" />
-            APPLICATION SUBMITTED
           </span>
         ) : isSubmitting ? (
           <span className="inline-flex items-center gap-2">

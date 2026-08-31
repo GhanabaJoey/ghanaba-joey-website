@@ -90,7 +90,6 @@ export async function sendBoxGamesApplicationNotification(
     to: NOTIFICATION_TO,
     from,
     hasApiKey: Boolean(apiKey),
-    apiKeyPrefix: apiKey ? apiKey.slice(0, 8) : null,
   });
 
   if (!apiKey) {
