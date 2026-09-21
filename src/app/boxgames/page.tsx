@@ -6,9 +6,9 @@ import { BoxGamesArenaBackground } from "@/components/boxgames/BoxGamesArenaBack
 import { BoxGamesHero } from "@/components/boxgames/BoxGamesHero";
 
 export const metadata: Metadata = {
-  title: "Official Box Games | Ghanaba Joey",
+  title: "Official Monthly Box Games | Ghanaba Joey",
   description:
-    "Apply for the Official Ghanaba Joey Box Games. Enter your TikTok username, choose your target, and submit your application.",
+    "Apply for Official Monthly Box Games. Enter your TikTok username, choose your target, and submit your application.",
 };
 
 export default function BoxGamesPage() {

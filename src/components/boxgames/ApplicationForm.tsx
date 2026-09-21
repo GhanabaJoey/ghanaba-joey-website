@@ -2,9 +2,13 @@
 
 import { Check, Crown, Flame, Gem, Loader2 } from "lucide-react";
 import { FormEvent, useState } from "react";
+import {
+  BOX_GAMES_HONEYPOT_FIELD,
+  BOX_GAMES_TARGET_DATES,
+  OFFICIAL_MONTHLY_BOX_GAMES_NAME,
+  type BoxGamesSelectableTarget,
+} from "@/lib/box-games/application-rules";
 import { PremiumButton } from "@/components/ui/PremiumButton";
-
-type SelectableTarget = "30K" | "50K";
 
 interface FormErrors {
   username?: string;
@@ -12,13 +16,8 @@ interface FormErrors {
   submit?: string;
 }
 
-const TARGET_DATES: Record<SelectableTarget, string> = {
-  "30K": "2026-09-20",
-  "50K": "2026-09-27",
-};
-
 const TARGET_OPTIONS: {
-  value: SelectableTarget | "100K";
+  value: BoxGamesSelectableTarget | "100K";
   dateLabel: string;
   icon: "flame" | "gem" | "crown";
   selectable: boolean;
@@ -56,7 +55,8 @@ function validateUsername(value: string): string | undefined {
 
 export function ApplicationForm() {
   const [username, setUsername] = useState("");
-  const [target, setTarget] = useState<SelectableTarget | "">("");
+  const [target, setTarget] = useState<BoxGamesSelectableTarget | "">("");
+  const [honeypot, setHoneypot] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -84,8 +84,8 @@ export function ApplicationForm() {
 
     if (Object.keys(nextErrors).length > 0) return;
 
-    const selectedTarget = target as SelectableTarget;
-    const available_date = TARGET_DATES[selectedTarget];
+    const selectedTarget = target as BoxGamesSelectableTarget;
+    const available_date = BOX_GAMES_TARGET_DATES[selectedTarget];
 
     setIsSubmitting(true);
     setErrors((prev) => ({ ...prev, submit: undefined }));
@@ -95,9 +95,8 @@ export function ApplicationForm() {
         username: normalizeUsername(username),
         target: selectedTarget,
         available_date,
+        [BOX_GAMES_HONEYPOT_FIELD]: honeypot,
       };
-
-      console.info("[Box Games] Submitting application", payload);
 
       const response = await fetch("/api/box-games/apply", {
         method: "POST",
@@ -105,23 +104,11 @@ export function ApplicationForm() {
         body: JSON.stringify(payload),
       });
 
-      let result: {
-        success?: boolean;
-        error?: {
-          message?: string;
-          details?: string;
-          hint?: string;
-          code?: string;
-        };
-      } = {};
+      let result: { success?: boolean; error?: { message?: string } } = {};
 
       try {
         result = await response.json();
-      } catch (parseError) {
-        console.error("[Box Games] Failed to parse API response", {
-          status: response.status,
-          parseError,
-        });
+      } catch {
         setErrors((prev) => ({
           ...prev,
           submit:
@@ -131,11 +118,6 @@ export function ApplicationForm() {
       }
 
       if (!response.ok || result.success !== true) {
-        console.error("[Box Games] API submit failed", {
-          status: response.status,
-          supabaseError: result.error,
-          payload,
-        });
         setErrors((prev) => ({
           ...prev,
           submit:
@@ -144,14 +126,8 @@ export function ApplicationForm() {
         return;
       }
 
-      console.info("[Box Games] Application saved successfully", result);
       setIsSuccess(true);
-    } catch (caught) {
-      console.error("[Box Games] Submit error", {
-        error: caught,
-        message: caught instanceof Error ? caught.message : String(caught),
-        stack: caught instanceof Error ? caught.stack : undefined,
-      });
+    } catch {
       setErrors((prev) => ({
         ...prev,
         submit:
@@ -168,7 +144,7 @@ export function ApplicationForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className={`boxgames-form-card w-full max-w-full min-w-0 space-y-6 rounded-2xl p-6 sm:space-y-7 sm:p-7 ${
+      className={`boxgames-form-card relative w-full max-w-full min-w-0 space-y-6 rounded-2xl p-6 sm:space-y-7 sm:p-7 ${
         isSuccess ? "boxgames-success-card" : ""
       }`}
     >
@@ -182,11 +158,27 @@ export function ApplicationForm() {
             Application submitted successfully! 🎉
           </p>
           <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-zinc-400">
-            Thank you for applying to join the Ghanaba Joey Box Games. We&apos;ll
+            Thank you for applying to {OFFICIAL_MONTHLY_BOX_GAMES_NAME}. We&apos;ll
             review your application and contact you if selected.
           </p>
         </div>
       )}
+
+      <div
+        className="absolute left-[-9999px] h-px w-px overflow-hidden"
+        aria-hidden="true"
+      >
+        <label htmlFor="company-website-honeypot">Company website</label>
+        <input
+          id="company-website-honeypot"
+          type="text"
+          name={BOX_GAMES_HONEYPOT_FIELD}
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+        />
+      </div>
 
       <div>
         <label

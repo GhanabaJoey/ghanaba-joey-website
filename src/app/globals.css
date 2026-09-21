@@ -1,13 +1,10 @@
 @import "tailwindcss";
+@import "../styles/design-tokens.css";
+@import "../styles/design-utilities.css";
+@import "../styles/home-sections.css";
 
 :root {
-  --background: #050505;
-  --foreground: #f5f5f5;
-  --gold: #d4af37;
-  --gold-light: #f0d060;
-  --gold-dark: #a8892a;
-  --charcoal: #111111;
-  --charcoal-light: #1a1a1a;
+  /* Legacy boxgames accents — retained until page rebuild */
   --purple-glow: #8b5cf6;
   --pink-glow: #ec4899;
 }
@@ -22,8 +19,6 @@
   --color-charcoal-light: var(--charcoal-light);
   --color-purple-glow: var(--purple-glow);
   --color-pink-glow: var(--pink-glow);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 * {
@@ -174,6 +169,459 @@ body {
 
 .cinematic-vignette {
   box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.6);
+}
+
+/* Ghanaba Joey — luxury brand homepage */
+.brand-page {
+  position: relative;
+  background: #060606;
+  color: #f5f5f5;
+}
+
+.brand-noise {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.brand-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .brand-shell {
+    padding-inline: 2rem;
+  }
+}
+
+.brand-nav {
+  position: relative;
+  z-index: 20;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(6, 6, 6, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.brand-nav__link {
+  font-size: 0.875rem;
+  color: rgb(161 161 170);
+  transition: color 0.2s ease;
+}
+
+.brand-nav__link:hover {
+  color: #fff;
+}
+
+.brand-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.88);
+}
+
+.brand-section-index {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.75);
+}
+
+.brand-section-heading {
+  font-size: clamp(1.5rem, 2.5vw + 0.75rem, 2.25rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+}
+
+.brand-lead {
+  font-size: clamp(1.125rem, 1.5vw + 0.5rem, 1.375rem);
+  line-height: 1.45;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.brand-cta {
+  align-items: center;
+  justify-content: center;
+  min-width: 10rem;
+  padding: 0.875rem 1.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #0a0a0a;
+  background: linear-gradient(135deg, #c9a227 0%, #e8c547 50%, #d4af37 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.brand-cta:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.brand-cta--outline {
+  color: #d4af37;
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+.brand-cta--outline:hover {
+  background: rgba(212, 175, 55, 0.06);
+  opacity: 1;
+}
+
+.brand-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.28) 50%,
+    transparent 100%
+  );
+}
+
+/* Hero */
+.brand-hero {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100svh - 4.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(ellipse 80% 55% at 78% 42%, rgba(212, 175, 55, 0.07) 0%, transparent 58%),
+    radial-gradient(ellipse 60% 45% at 12% 18%, rgba(255, 255, 255, 0.02) 0%, transparent 55%),
+    linear-gradient(180deg, #070707 0%, #060606 100%);
+}
+
+.brand-hero__layout {
+  display: grid;
+  flex: 1;
+  align-content: center;
+  gap: 3rem;
+  padding-block: 3.5rem 2rem;
+}
+
+@media (min-width: 1024px) {
+  .brand-hero__layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: 2rem;
+    padding-block: 4.5rem 3rem;
+  }
+}
+
+.brand-hero__title {
+  font-size: clamp(3rem, 9vw, 5.75rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.brand-hero__name-gold {
+  color: #d4af37;
+}
+
+.brand-hero__visual {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .brand-hero__visual {
+    justify-content: flex-end;
+  }
+}
+
+.brand-hero__visual-stage {
+  position: relative;
+  width: min(72vw, 15rem);
+  height: min(88vw, 18.5rem);
+}
+
+@media (min-width: 640px) {
+  .brand-hero__visual-stage {
+    width: min(52vw, 17rem);
+    height: min(64vw, 21rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-hero__visual-stage {
+    width: 17.5rem;
+    height: 21.5rem;
+  }
+}
+
+.brand-hero__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.brand-hero__glow--primary {
+  left: 50%;
+  top: 46%;
+  width: 88%;
+  height: 72%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, transparent 68%);
+}
+
+.brand-hero__glow--secondary {
+  left: 58%;
+  top: 36%;
+  width: 52%;
+  height: 44%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+}
+
+.brand-hero__portrait {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.brand-hero__portrait-image {
+  -webkit-mask-image: radial-gradient(
+    ellipse 78% 84% at 50% 36%,
+    #000 48%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 78% 84% at 50% 36%,
+    #000 48%,
+    transparent 100%
+  );
+}
+
+.brand-hero__portrait-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse 90% 90% at 50% 40%, transparent 36%, rgba(6, 6, 6, 0.55) 100%),
+    linear-gradient(to top, #060606 0%, transparent 38%),
+    linear-gradient(to right, transparent 55%, rgba(6, 6, 6, 0.35) 100%);
+  pointer-events: none;
+}
+
+.brand-scroll {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-inline: auto;
+  padding-top: 0.5rem;
+  text-decoration: none;
+  color: rgb(113 113 122);
+  transition: color 0.2s ease;
+}
+
+.brand-scroll:hover {
+  color: rgba(212, 175, 55, 0.85);
+}
+
+.brand-scroll__label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.brand-scroll__icon {
+  opacity: 0.75;
+}
+
+/* About */
+.brand-about {
+  position: relative;
+  z-index: 1;
+  padding-block: 5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.brand-about__grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .brand-about__grid {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* Platforms */
+.brand-platform {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.brand-platform__ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.brand-platform--nextwave .brand-platform__ambient {
+  background:
+    radial-gradient(ellipse 70% 80% at 100% 0%, rgba(88, 56, 128, 0.12) 0%, transparent 55%),
+    linear-gradient(180deg, #08070b 0%, #060606 100%);
+}
+
+.brand-platform--battles .brand-platform__ambient {
+  background:
+    radial-gradient(ellipse 65% 75% at 100% 100%, rgba(212, 175, 55, 0.08) 0%, transparent 58%),
+    linear-gradient(180deg, #070605 0%, #060606 100%);
+}
+
+.brand-platform__inner {
+  position: relative;
+  z-index: 1;
+  padding-block: 5rem;
+}
+
+.brand-platform__index {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgba(212, 175, 55, 0.22);
+}
+
+.brand-platform__title {
+  font-size: clamp(1.625rem, 2.5vw + 0.5rem, 2.375rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: 0.03em;
+}
+
+.brand-platform__copy {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: rgb(161 161 170);
+}
+
+.brand-platform__secondary a {
+  text-decoration: none;
+}
+
+.brand-targets {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: 28rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.14);
+}
+
+@media (min-width: 640px) {
+  .brand-targets {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.brand-targets__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.125rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (min-width: 640px) {
+  .brand-targets__item {
+    padding: 1.25rem 1rem 1.25rem 0;
+    border-bottom: none;
+  }
+
+  .brand-targets__item:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+  }
+}
+
+.brand-targets__value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.brand-targets__date {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(161 161 170);
+}
+
+.brand-targets__item--soon .brand-targets__value,
+.brand-targets__item--soon .brand-targets__date {
+  color: rgb(82 82 91);
+}
+
+/* Statement */
+.brand-statement {
+  position: relative;
+  z-index: 1;
+  padding-block: 6rem;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 62%),
+    #060606;
+}
+
+.brand-statement__inner {
+  text-align: center;
+}
+
+.brand-statement__title {
+  font-size: clamp(2rem, 5vw + 0.5rem, 3.5rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: 0.06em;
+}
+
+.brand-statement__subtitle {
+  font-size: clamp(1rem, 1.5vw + 0.5rem, 1.25rem);
+  letter-spacing: 0.02em;
+}
+
+/* Footer */
+.brand-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: #050505;
+}
+
+.brand-footer__link {
+  font-size: 0.875rem;
+  color: rgb(113 113 122);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.brand-footer__link:hover {
+  color: #fff;
 }
 
 /* Shared centre column — heading + form stay between lion zones on desktop */

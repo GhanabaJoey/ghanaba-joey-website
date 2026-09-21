@@ -1,68 +1,104 @@
 import { NextResponse } from "next/server";
-import { sendBoxGamesApplicationNotification } from "@/lib/email/send-box-games-application-notification";
 import {
-  createServerSupabaseClient,
-  type BoxGameApplicationInsert,
-} from "@/lib/supabase/server";
+  BOX_GAMES_HONEYPOT_FIELD,
+  validateBoxGamesApplication,
+} from "@/lib/box-games/application-rules";
+import { sendBoxGamesApplicationNotification } from "@/lib/email/send-box-games-application-notification";
+import { logDevInfo, logDevWarn, logServerError } from "@/lib/server-log";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
-export async function POST(request: Request) {
-  console.info("[Box Games API] Request received");
+const MAX_BODY_BYTES = 2048;
 
-  let body: BoxGameApplicationInsert;
+type ApplyRequestBody = {
+  username?: unknown;
+  target?: unknown;
+  available_date?: unknown;
+  [key: string]: unknown;
+};
+
+function jsonValidationError() {
+  return NextResponse.json(
+    { error: { message: "Validation failed." } },
+    { status: 400 },
+  );
+}
+
+function jsonSubmitError(status: number) {
+  return NextResponse.json(
+    { error: { message: "Application could not be submitted." } },
+    { status },
+  );
+}
+
+export async function POST(request: Request) {
+  logDevInfo("[Box Games API] Request received");
+
+  const contentLengthHeader = request.headers.get("content-length");
+  if (contentLengthHeader) {
+    const contentLength = Number.parseInt(contentLengthHeader, 10);
+    if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+      logDevWarn("[Box Games API] Rejected: payload too large");
+      return jsonValidationError();
+    }
+  }
+
+  let rawBody: string;
 
   try {
-    body = (await request.json()) as BoxGameApplicationInsert;
+    rawBody = await request.text();
   } catch {
-    console.warn("[Box Games API] Validation failed: invalid JSON body");
-    return NextResponse.json(
-      { error: { message: "Invalid JSON body." } },
-      { status: 400 },
-    );
+    logDevWarn("[Box Games API] Failed to read body");
+    return jsonValidationError();
   }
 
-  const { username, target, available_date } = body;
-
-  if (!username || !target || !available_date) {
-    console.warn("[Box Games API] Validation failed: missing required fields", {
-      hasUsername: Boolean(username),
-      hasTarget: Boolean(target),
-      hasAvailableDate: Boolean(available_date),
-    });
-    return NextResponse.json(
-      {
-        error: {
-          message: "Missing required fields: username, target, available_date.",
-        },
-      },
-      { status: 400 },
-    );
+  if (rawBody.length > MAX_BODY_BYTES) {
+    logDevWarn("[Box Games API] Rejected: body exceeds size limit");
+    return jsonValidationError();
   }
 
-  console.info("[Box Games API] Validation passed", {
-    username,
-    target,
-    available_date,
+  let body: ApplyRequestBody;
+
+  try {
+    body = JSON.parse(rawBody) as ApplyRequestBody;
+  } catch {
+    logDevWarn("[Box Games API] Invalid JSON body");
+    return jsonValidationError();
+  }
+
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return jsonValidationError();
+  }
+
+  const honeypot = body[BOX_GAMES_HONEYPOT_FIELD];
+  if (typeof honeypot === "string" && honeypot.trim().length > 0) {
+    logDevWarn("[Box Games API] Honeypot triggered");
+    return NextResponse.json({ success: true });
+  }
+
+  const validation = validateBoxGamesApplication({
+    username: body.username,
+    target: body.target,
+    available_date: body.available_date,
+  });
+
+  if (!validation.ok) {
+    logDevWarn("[Box Games API] Validation failed");
+    return jsonValidationError();
+  }
+
+  const payload = validation.data;
+
+  logDevInfo("[Box Games API] Validation passed", {
+    target: payload.target,
+    available_date: payload.available_date,
   });
 
   try {
-    const supabaseUrlConfigured = Boolean(
-      process.env.NEXT_PUBLIC_SUPABASE_URL?.trim(),
-    );
-    const supabaseKeyConfigured = Boolean(
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim(),
-    );
-
-    console.info("[Box Games API] Supabase env check", {
-      hasUrl: supabaseUrlConfigured,
-      hasAnonKey: supabaseKeyConfigured,
-    });
-
     const supabase = createServerSupabaseClient();
-    const payload = { username, target, available_date };
 
-    console.info("[Box Games API] Supabase insert starting", payload);
+    logDevInfo("[Box Games API] Supabase insert starting");
 
     const { error } = await supabase.from("box_game_applications").insert(payload);
 
@@ -72,50 +108,34 @@ export async function POST(request: Request) {
         error.message.includes("ENOTFOUND") ||
         error.message.includes("Failed to fetch");
 
-      const friendlyMessage = isNetworkError
-        ? "Could not reach Supabase. Verify NEXT_PUBLIC_SUPABASE_URL matches your exact Project URL from Supabase Dashboard → Project Settings → API."
-        : error.message;
-
-      console.error("[Box Games API] Supabase insert failed", {
+      logServerError("[Box Games API] Supabase insert failed", {
         message: error.message,
+        code: error.code,
         details: error.details,
         hint: error.hint,
-        code: error.code,
-        payload,
-        httpStatus: isNetworkError ? 503 : 400,
+        network: isNetworkError,
       });
 
-      return NextResponse.json(
-        {
-          error: {
-            message: friendlyMessage,
-            details: error.details,
-            hint: error.hint,
-            code: error.code,
-          },
-        },
-        { status: isNetworkError ? 503 : 400 },
-      );
+      return jsonSubmitError(isNetworkError ? 503 : 500);
     }
 
-    console.info("[Box Games API] Supabase insert succeeded", { payload });
+    logDevInfo("[Box Games API] Supabase insert succeeded");
 
     const emailResult = await sendBoxGamesApplicationNotification({
-      username,
-      target,
-      available_date,
+      username: payload.username,
+      target: payload.target,
+      available_date: payload.available_date,
       submittedAt: new Date(),
     });
 
-    if (emailResult.ok) {
-      console.info("[Box Games API] Email notification sent successfully", {
-        id: emailResult.id,
-        to: "ghanabajoey10@gmail.com",
+    if (!emailResult.ok) {
+      logServerError("[Box Games API] Email notification failed", {
+        error: emailResult.error,
       });
     } else {
-      console.error(
-        `[Box Games API] Email notification failed: ${emailResult.error}`,
-      );
+      logDevInfo("[Box Games API] Email notification sent", {
+        id: emailResult.id,
+      });
     }
 
     return NextResponse.json({ success: true });
@@ -123,18 +143,13 @@ export async function POST(request: Request) {
     const message =
       caught instanceof Error ? caught.message : "Unexpected server error.";
 
-    console.error("[Box Games API] Unexpected error", {
+    logServerError("[Box Games API] Unexpected error", {
       message,
       name: caught instanceof Error ? caught.name : undefined,
     });
 
-    return NextResponse.json(
-      {
-        error: {
-          message,
-        },
-      },
-      { status: 500 },
-    );
+    const isConfigError = message.includes("Missing NEXT_PUBLIC_SUPABASE");
+
+    return jsonSubmitError(isConfigError ? 503 : 500);
   }
 }

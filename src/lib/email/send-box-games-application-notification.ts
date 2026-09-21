@@ -1,8 +1,10 @@
 import { Resend } from "resend";
+import { OFFICIAL_MONTHLY_BOX_GAMES_NAME } from "@/lib/box-games/application-rules";
+import { logDevInfo, logServerError } from "@/lib/server-log";
 
 const NOTIFICATION_TO = "ghanabajoey10@gmail.com";
-const EMAIL_SUBJECT = "New Official Box Games Application";
-const DEFAULT_FROM_EMAIL = "Official Box Games <notifications@ghanabajoey.com>";
+const EMAIL_SUBJECT = `New ${OFFICIAL_MONTHLY_BOX_GAMES_NAME} Application`;
+const DEFAULT_FROM_EMAIL = `${OFFICIAL_MONTHLY_BOX_GAMES_NAME} <notifications@ghanabajoey.com>`;
 
 export type BoxGamesApplicationEmailPayload = {
   username: string;
@@ -26,7 +28,7 @@ function formatSubmittedAt(date: Date): string {
 
 function buildPlainText(payload: BoxGamesApplicationEmailPayload): string {
   return [
-    "New Official Box Games Application",
+    `New ${OFFICIAL_MONTHLY_BOX_GAMES_NAME} Application`,
     "",
     `TikTok Username: ${payload.username}`,
     `Target: ${payload.target}`,
@@ -40,7 +42,7 @@ function buildHtml(payload: BoxGamesApplicationEmailPayload): string {
 
   return `
     <div style="font-family: Arial, Helvetica, sans-serif; color: #111111; line-height: 1.6; max-width: 560px;">
-      <h1 style="font-size: 22px; margin: 0 0 20px;">New Official Box Games Application</h1>
+      <h1 style="font-size: 22px; margin: 0 0 20px;">New ${escapeHtml(OFFICIAL_MONTHLY_BOX_GAMES_NAME)} Application</h1>
       <p style="margin: 0 0 10px;"><strong>TikTok Username:</strong> ${escapeHtml(payload.username)}</p>
       <p style="margin: 0 0 10px;"><strong>Target:</strong> ${escapeHtml(payload.target)}</p>
       <p style="margin: 0 0 10px;"><strong>Available Date:</strong> ${escapeHtml(payload.available_date)}</p>
@@ -86,22 +88,20 @@ export async function sendBoxGamesApplicationNotification(
   const apiKey = readServerEnv("RESEND_API_KEY");
   const from = readServerEnv("RESEND_FROM_EMAIL") || DEFAULT_FROM_EMAIL;
 
-  console.info("[Box Games Email] Preparing notification", {
-    to: NOTIFICATION_TO,
-    from,
+  logDevInfo("[Box Games Email] Preparing notification", {
     hasApiKey: Boolean(apiKey),
   });
 
   if (!apiKey) {
     const error = "RESEND_API_KEY is not configured on the server.";
-    console.error(`[Box Games Email] Email notification failed: ${error}`);
+    logServerError("[Box Games Email] Email notification failed", { error });
     return { ok: false, error };
   }
 
   if (from.includes("onboarding@resend.dev")) {
     const error =
       "Invalid sender address. RESEND_FROM_EMAIL must use your verified ghanabajoey.com domain.";
-    console.error(`[Box Games Email] Email notification failed: ${error}`);
+    logServerError("[Box Games Email] Email notification failed", { error });
     return { ok: false, error };
   }
 
@@ -117,20 +117,20 @@ export async function sendBoxGamesApplicationNotification(
 
     if (error) {
       const errorMessage = formatResendError(error);
-      console.error(`[Box Games Email] Email notification failed: ${errorMessage}`, error);
+      logServerError("[Box Games Email] Email notification failed", {
+        error: errorMessage,
+      });
       return { ok: false, error: errorMessage };
     }
 
-    console.info("[Box Games Email] Email notification sent successfully", {
-      id: data?.id,
-      to: NOTIFICATION_TO,
-      from,
-    });
+    logDevInfo("[Box Games Email] Email notification sent", { id: data?.id });
 
     return { ok: true, id: data?.id };
   } catch (caught) {
     const errorMessage = formatResendError(caught);
-    console.error(`[Box Games Email] Email notification failed: ${errorMessage}`, caught);
+    logServerError("[Box Games Email] Email notification failed", {
+      error: errorMessage,
+    });
     return { ok: false, error: errorMessage };
   }
 }

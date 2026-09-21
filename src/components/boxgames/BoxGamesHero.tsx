@@ -7,7 +7,7 @@ export function BoxGamesHero() {
       />
 
       <h1 className="relative text-[clamp(1.75rem,3.6vw+0.5rem,2.5rem)] font-bold tracking-[0.14em] text-white uppercase">
-        <span className="boxgames-title-glow premium-gradient-text">Official Box Games</span>
+        <span className="boxgames-title-glow premium-gradient-text">Official Monthly Box Games</span>
       </h1>
 
       <p className="relative mx-auto mt-4 max-w-sm text-[clamp(1rem,2vw+0.5rem,1.25rem)] font-semibold leading-snug text-white sm:max-w-md">
