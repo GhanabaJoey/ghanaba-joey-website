@@ -21,14 +21,10 @@ export function MeetGhanabaJoey() {
               </div>
             }
             secondary={
-              <div className="space-y-5 gj-body-lg text-gj-foreground-muted lg:pt-2">
+              <div className="space-y-6 gj-body-lg text-gj-foreground-muted lg:pt-2">
                 <p>
-                  I&apos;m passionate about creating experiences that bring people together
-                  and finding new ways to turn creativity into opportunity.
-                </p>
-                <p>
-                  What started as content creation has evolved into a growing ecosystem
-                  built around creators, community and LIVE entertainment.
+                  Creating experiences that bring people together — and turning creativity
+                  into opportunity through LIVE entertainment and the creator ecosystem.
                 </p>
                 <Button href="/#about" variant="text" showArrow>
                   More about me

@@ -1,15 +1,17 @@
 import { Button } from "@/components/design-system/buttons/Button";
 import { ContentContainer } from "@/components/design-system/layout/ContentContainer";
+import { EditorialSplit } from "@/components/design-system/sections/EditorialSplit";
 import { Section } from "@/components/design-system/sections/Section";
 import { Typography } from "@/components/design-system/typography/Typography";
 import { RevealOnScroll } from "@/components/home/RevealOnScroll";
+import { HomeEditorialVisual } from "@/components/home/visuals/HomeEditorialVisual";
 import { SITE_LINKS } from "@/lib/site-links";
 
 const EXPERIENCES = [
   {
     label: "Destiny Helper",
     tagline: "The daily LIVE experience.",
-    copy: "Come together, compete, connect and be part of the experience.",
+    copy: "Compete, connect and be part of the experience.",
     schedule: "Every day • 2PM UK",
     cta: "Join the live",
     href: SITE_LINKS.tiktokProfile,
@@ -17,9 +19,9 @@ const EXPERIENCES = [
     tone: "border-gj-gold/25",
   },
   {
-    label: "Box Games",
+    label: "Official Monthly Box Games",
     tagline: "The monthly creator event.",
-    copy: "A bigger LIVE experience bringing creators together for competition, entertainment and rewards.",
+    copy: "Creators together for competition, entertainment and rewards.",
     schedule: null,
     cta: "Discover box games",
     href: SITE_LINKS.boxGamesAlias,
@@ -27,9 +29,9 @@ const EXPERIENCES = [
     tone: "border-gj-border",
   },
   {
-    label: "NextWave",
+    label: "NextWave Creator Network",
     tagline: "Where creators connect.",
-    copy: "A creator network built around community, collaboration, growth and opportunities — whether you're starting out or taking your journey further.",
+    copy: "Community, collaboration, growth and opportunities.",
     schedule: null,
     cta: "Join NextWave",
     href: SITE_LINKS.nextwave,
@@ -47,13 +49,21 @@ export function EcosystemSection() {
     >
       <ContentContainer>
         <RevealOnScroll>
-          <Typography role="heading-xl" className="text-gj-foreground">
-            The ecosystem
-          </Typography>
-          <p className="gj-body-lg mt-4 max-w-2xl text-gj-foreground-muted">
-            Three connected experiences — daily LIVE, monthly competition and a creator
-            network — built around participation, not passive viewing.
-          </p>
+          <EditorialSplit
+            gap="lg"
+            primary={
+              <div>
+                <Typography role="heading-xl" className="text-gj-foreground">
+                  The ecosystem
+                </Typography>
+                <p className="gj-body-lg mt-4 max-w-md text-gj-foreground-muted">
+                  Destiny Helper, Official Monthly Box Games and NextWave — three connected
+                  experiences.
+                </p>
+              </div>
+            }
+            secondary={<HomeEditorialVisual variant="community" size="compact" />}
+          />
 
           <div className="home-ecosystem mt-14 lg:mt-16">
             {EXPERIENCES.map((item, index) => (
@@ -63,7 +73,7 @@ export function EcosystemSection() {
               >
                 <p className="gj-label text-gj-gold">{item.label}</p>
                 <h3 className="gj-heading-lg mt-3 text-gj-foreground">{item.tagline}</h3>
-                <p className="gj-body mt-4 flex-1 text-gj-foreground-muted">{item.copy}</p>
+                <p className="gj-body-sm mt-3 flex-1 text-gj-foreground-muted">{item.copy}</p>
                 {item.schedule && (
                   <p className="gj-caption mt-4 text-gj-gold/90">{item.schedule}</p>
                 )}

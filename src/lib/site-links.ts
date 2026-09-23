@@ -4,6 +4,7 @@ export const SITE_LINKS = {
   ukCreatorApply: "https://www.tiktok.com/t/ZSxckUq1U/",
   tiktokProfile: "https://www.tiktok.com/@ghanabajoey1",
   contact: "/contact",
+  workWithMe: "/#work-with-me",
   /** Legacy application route — must remain functional */
   boxBattles: "/boxgames",
   /** Public alias; redirects to `/boxgames` */

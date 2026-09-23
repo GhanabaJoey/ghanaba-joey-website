@@ -31,12 +31,7 @@ export function BuiltForCreators() {
             Built for creators.
             <span className="mt-2 block text-gj-gold">Open to opportunities.</span>
           </Typography>
-          <p className="gj-body-lg mt-8 max-w-2xl text-gj-foreground-muted">
-            The goal isn&apos;t just to create an audience. It&apos;s to create an
-            ecosystem where creators can:
-          </p>
-
-          <div className="home-pillars mt-14">
+          <div className="home-pillars mt-12">
             {IDEAS.map((idea, index) => (
               <div key={idea.title} className="border-t border-gj-border-subtle pt-8">
                 <p className="home-pillar__index" aria-hidden="true">

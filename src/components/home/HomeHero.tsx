@@ -31,18 +31,11 @@ export function HomeHero() {
             Creating opportunities.
           </p>
 
-          <p className="gj-body mt-6 max-w-lg text-gj-foreground-muted">
-            I&apos;m Ghanaba Joey — a creator, host and entrepreneur building experiences
-            that bring creators and communities together. From LIVE entertainment and
-            creator competitions to community and brand partnerships, everything I build
-            is about creating places where people can connect, participate and grow.
-          </p>
-
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button href="/#ecosystem" variant="primary">
               Explore the ecosystem
             </Button>
-            <Button href={SITE_LINKS.contact} variant="outline">
+            <Button href={SITE_LINKS.workWithMe} variant="outline">
               Work with me
             </Button>
           </div>

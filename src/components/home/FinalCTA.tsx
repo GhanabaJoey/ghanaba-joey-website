@@ -14,9 +14,6 @@ export function FinalCTA() {
             Creating experiences.
             <span className="mt-2 block text-gj-gold">Building community. Creating opportunities.</span>
           </p>
-          <p className="gj-body-lg mx-auto mt-8 max-w-lg text-center text-gj-foreground-muted">
-            Welcome to the world of Ghanaba Joey — find your place in the ecosystem.
-          </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button href={SITE_LINKS.tiktokProfile} external variant="primary">
               Follow the journey
