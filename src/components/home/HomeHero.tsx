@@ -1,10 +1,11 @@
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/design-system/buttons/Button";
 import { DepthStage } from "@/components/design-system/depth/DepthStage";
 import { Typography } from "@/components/design-system/typography/Typography";
-import { PORTRAIT_SRC, SITE_LINKS } from "@/lib/site-links";
+import { HomeCinematicMedia } from "@/components/home/visuals/HomeCinematicMedia";
+import { HOME_MEDIA } from "@/lib/home-media";
+import { SITE_LINKS } from "@/lib/site-links";
 
 export function HomeHero() {
   return (
@@ -42,21 +43,17 @@ export function HomeHero() {
         </div>
 
         <div className="relative z-[1] flex justify-center lg:justify-end">
-          <div className="home-hero__portrait-wrap">
+          <div className="home-hero__media">
             <span className="home-hero__emblem" aria-hidden="true">
               GJ
             </span>
-            <span className="home-hero__portrait-ring" aria-hidden="true" />
-            <div className="gj-image-portrait gj-image-cinematic relative h-full w-full shadow-[0_24px_80px_rgba(0,0,0,0.55)]">
-              <Image
-                src={PORTRAIT_SRC}
-                alt="Ghanaba Joey"
-                fill
-                priority
-                sizes="(max-width: 1024px) 320px, 352px"
-                className="object-cover object-[center_12%]"
-              />
-            </div>
+            <HomeCinematicMedia
+              src={HOME_MEDIA.hero}
+              alt="Ghanaba Joey"
+              variant="hero"
+              priority
+              sizes="(max-width: 1024px) min(72vw, 18rem), 20rem"
+            />
           </div>
         </div>
       </div>

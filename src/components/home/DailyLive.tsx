@@ -5,14 +5,9 @@ import { Section } from "@/components/design-system/sections/Section";
 import { SectionEyebrow } from "@/components/design-system/sections/SectionEyebrow";
 import { Typography } from "@/components/design-system/typography/Typography";
 import { RevealOnScroll } from "@/components/home/RevealOnScroll";
-import { HomeEditorialVisual } from "@/components/home/visuals/HomeEditorialVisual";
+import { HomeCinematicMedia } from "@/components/home/visuals/HomeCinematicMedia";
+import { HOME_MEDIA } from "@/lib/home-media";
 import { SITE_LINKS } from "@/lib/site-links";
-
-const SUPPORTS = [
-  "Entertainment & community on TikTok LIVE",
-  "TikTok growth education",
-  "Monetisation guidance",
-] as const;
 
 export function DailyLive() {
   return (
@@ -34,20 +29,9 @@ export function DailyLive() {
                   Play. Learn. Grow.
                 </Typography>
                 <p className="gj-body-lg mt-5 max-w-md text-gj-foreground-muted">
-                  Entertainment, participation and education — with Destiny Helper at the
-                  centre of the experience.
+                  A place for entertainment, creator interaction, competition and community.
                 </p>
-
-                <ul className="mt-8 flex flex-wrap gap-2">
-                  {SUPPORTS.map((item) => (
-                    <li
-                      key={item}
-                      className="gj-body-sm rounded-full border border-gj-border-subtle px-3 py-1.5 text-gj-foreground-muted"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                <p className="gj-caption mt-6 text-gj-gold/90">Every day • 2PM UK</p>
 
                 <div className="mt-10">
                   <Button href={SITE_LINKS.tiktokProfile} external variant="outline" size="sm">
@@ -56,7 +40,14 @@ export function DailyLive() {
                 </div>
               </div>
             }
-            secondary={<HomeEditorialVisual variant="live" />}
+            secondary={
+              <HomeCinematicMedia
+                src={HOME_MEDIA.dailyLive}
+                alt="Ghanaba Joey hosting a TikTok LIVE"
+                variant="live-portrait"
+                sizes="(max-width: 1024px) 88vw, 400px"
+              />
+            }
           />
         </RevealOnScroll>
       </ContentContainer>

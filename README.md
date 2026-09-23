@@ -35,6 +35,10 @@ Set these in `.env.local` for local development and in your hosting provider for
 
 Never commit secrets. `.env*` is gitignored except `.env.example` (names only).
 
+## Homepage media (temporary)
+
+Owner-supplied visuals live under `public/media/ghanaba-joey/`. Replace files in place (same filenames) when higher-resolution or final LIVE / Box Games artwork is ready. See `public/media/ghanaba-joey/README.md`.
+
 ## Routes
 
 | Route | Description |
