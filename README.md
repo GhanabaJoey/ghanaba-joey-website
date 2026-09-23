@@ -41,7 +41,9 @@ Never commit secrets. `.env*` is gitignored except `.env.example` (names only).
 | ----- | ----------- |
 | `/` | Personal brand homepage |
 | `/boxgames` | Official Monthly Box Games application page |
+| `/contact` | Media / collaboration enquiry form |
 | `POST /api/box-games/apply` | Validates and stores applications |
+| `POST /api/contact` | Sends enquiry email via Resend |
 
 ## Official Monthly Box Games — application flow
 

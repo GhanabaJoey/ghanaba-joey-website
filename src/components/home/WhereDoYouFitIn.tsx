@@ -24,7 +24,7 @@ const PATHWAYS = [
     title: "I'm a brand",
     copy: "Let's create a campaign, collaboration or experience together.",
     cta: "Work with me",
-    href: "/#work-with-me",
+    href: `${SITE_LINKS.contact}?type=brand`,
     external: false,
   },
 ] as const;

@@ -7,53 +7,40 @@ import { RevealOnScroll } from "@/components/home/RevealOnScroll";
 import { SITE_LINKS } from "@/lib/site-links";
 
 const SUPPORTS = [
-  {
-    title: "Entertainment & community",
-    copy: "LIVE interaction, energy and participation — including Destiny Helper as part of the show.",
-  },
-  {
-    title: "TikTok growth",
-    copy: "Practical ideas and education around growing on TikTok.",
-  },
-  {
-    title: "TikTok monetisation",
-    copy: "Understanding opportunities to monetise on TikTok.",
-  },
+  "Entertainment and community interaction on TikTok LIVE.",
+  "Practical education around TikTok growth.",
+  "Guidance on monetisation opportunities on TikTok.",
 ] as const;
 
 export function DailyLive() {
   return (
     <Section
       id="live"
-      spacing="lg"
+      spacing="default"
       tone="destiny-helper"
       className="scroll-mt-24 border-t border-gj-border-subtle"
     >
       <ContentContainer>
         <RevealOnScroll>
-          <div className="max-w-3xl">
-            <SectionEyebrow>Inside the daily LIVE</SectionEyebrow>
-            <Typography role="heading-xl" className="mt-5 text-gj-foreground">
-              Play. Learn. Grow.
-            </Typography>
-            <p className="gj-body-lg mt-6 text-gj-foreground-muted">
-              Beyond the ecosystem entry points, the Daily LIVE is where entertainment,
-              education and community come together — with room to participate, not just
-              watch.
-            </p>
-          </div>
+          <SectionEyebrow>Daily LIVE</SectionEyebrow>
+          <Typography role="heading-xl" className="mt-5 text-gj-foreground">
+            Play. Learn. Grow.
+          </Typography>
+          <p className="gj-body-lg mt-5 max-w-2xl text-gj-foreground-muted">
+            The Daily LIVE brings together entertainment, participation and education —
+            including Destiny Helper as part of the experience.
+          </p>
 
-          <ul className="mt-12 space-y-8 border-t border-gj-border-subtle pt-10">
+          <ul className="mt-8 space-y-3">
             {SUPPORTS.map((item) => (
-              <li key={item.title} className="max-w-2xl">
-                <h3 className="gj-heading-md text-gj-foreground">{item.title}</h3>
-                <p className="gj-body mt-2 text-gj-foreground-muted">{item.copy}</p>
+              <li key={item} className="gj-body max-w-2xl text-gj-foreground-muted">
+                {item}
               </li>
             ))}
           </ul>
 
           <div className="mt-10">
-            <Button href={SITE_LINKS.tiktokProfile} external variant="outline">
+            <Button href={SITE_LINKS.tiktokProfile} external variant="outline" size="sm">
               Join the live on TikTok
             </Button>
           </div>

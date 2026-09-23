@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/design-system/buttons/Button";
 import { DepthStage } from "@/components/design-system/depth/DepthStage";
 import { Typography } from "@/components/design-system/typography/Typography";
-import { PORTRAIT_SRC } from "@/lib/site-links";
+import { PORTRAIT_SRC, SITE_LINKS } from "@/lib/site-links";
 
 export function HomeHero() {
   return (
@@ -42,7 +42,7 @@ export function HomeHero() {
             <Button href="/#ecosystem" variant="primary">
               Explore the ecosystem
             </Button>
-            <Button href="/#work-with-me" variant="outline">
+            <Button href={SITE_LINKS.contact} variant="outline">
               Work with me
             </Button>
           </div>

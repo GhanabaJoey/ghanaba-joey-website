@@ -5,10 +5,12 @@ import { HOME_PRIMARY_NAV } from "@/lib/navigation-config";
 import { SITE_LINKS } from "@/lib/site-links";
 
 export function HomeFooter() {
-  const footerNav = HOME_PRIMARY_NAV.filter((item) => item.label !== "Home");
+  const footerNav = HOME_PRIMARY_NAV.filter(
+    (item) => item.label !== "Home" && item.label !== "Contact",
+  );
 
   return (
-    <footer id="contact" className="scroll-mt-24 border-t border-gj-border-subtle py-14 sm:py-16">
+    <footer className="scroll-mt-24 border-t border-gj-border-subtle py-14 sm:py-16">
       <ContentContainer>
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-sm">
@@ -44,6 +46,12 @@ export function HomeFooter() {
                 </Link>
               ),
             )}
+            <Link
+              href={SITE_LINKS.contact}
+              className="gj-focus-ring gj-body-sm text-gj-foreground-muted hover:text-gj-foreground"
+            >
+              Contact
+            </Link>
           </nav>
         </div>
 
@@ -59,14 +67,9 @@ export function HomeFooter() {
             >
               TikTok
             </a>
-            <a
-              href={SITE_LINKS.tiktokProfile}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gj-focus-ring gj-caption hover:text-gj-gold"
-            >
+            <Link href={SITE_LINKS.contact} className="gj-focus-ring gj-caption hover:text-gj-gold">
               Contact
-            </a>
+            </Link>
           </div>
           <p className="gj-caption">© 2026 Ghanaba Joey</p>
         </div>

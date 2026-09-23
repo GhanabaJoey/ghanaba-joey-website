@@ -9,8 +9,6 @@ import { FinalCTA } from "@/components/home/FinalCTA";
 import { HomeFooter } from "@/components/home/HomeFooter";
 import { HomeHero } from "@/components/home/HomeHero";
 import { MeetGhanabaJoey } from "@/components/home/MeetGhanabaJoey";
-import { NextWaveSection } from "@/components/home/NextWaveSection";
-import { WebsiteDevelopmentSection } from "@/components/home/WebsiteDevelopmentSection";
 import { WhereDoYouFitIn } from "@/components/home/WhereDoYouFitIn";
 import { WorkWithMe } from "@/components/home/WorkWithMe";
 import { HOME_NAV_CTA, HOME_PRIMARY_NAV } from "@/lib/navigation-config";
@@ -18,11 +16,11 @@ import { HOME_NAV_CTA, HOME_PRIMARY_NAV } from "@/lib/navigation-config";
 export const metadata: Metadata = {
   title: "Ghanaba Joey | Creator • Host • Entrepreneur",
   description:
-    "Creating experiences. Building community. Creating opportunities. A creator ecosystem — Daily LIVE, Destiny Helper, Box Games, NextWave and partnerships for brands and businesses.",
+    "Creator • Host • Entrepreneur building experiences, community and opportunities through content, LIVE entertainment, creator experiences and brand collaborations.",
   openGraph: {
     title: "Ghanaba Joey | Creator • Host • Entrepreneur",
     description:
-      "More than content — an ecosystem for creators, LIVE entertainment, community and opportunities.",
+      "Creating experiences. Building community. Creating opportunities — media, LIVE, creator ecosystem and brand collaborations.",
     type: "website",
   },
 };
@@ -37,9 +35,7 @@ export default function HomePage() {
         <EcosystemSection />
         <BuiltForCreators />
         <DailyLive />
-        <NextWaveSection />
         <BrandsTogetherSection />
-        <WebsiteDevelopmentSection />
         <MeetGhanabaJoey />
         <WhereDoYouFitIn />
         <WorkWithMe />

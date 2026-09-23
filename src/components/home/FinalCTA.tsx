@@ -21,8 +21,8 @@ export function FinalCTA() {
             <Button href={SITE_LINKS.tiktokProfile} external variant="primary">
               Follow the journey
             </Button>
-            <Button href="/#pathways" variant="outline">
-              Where do you fit in?
+            <Button href={SITE_LINKS.contact} variant="outline">
+              Start a conversation
             </Button>
           </div>
         </RevealOnScroll>
