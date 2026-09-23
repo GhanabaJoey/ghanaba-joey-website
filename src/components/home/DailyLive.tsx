@@ -1,5 +1,4 @@
 import { Button } from "@/components/design-system/buttons/Button";
-import { GlassPanel } from "@/components/design-system/glass/GlassPanel";
 import { ContentContainer } from "@/components/design-system/layout/ContentContainer";
 import { Section } from "@/components/design-system/sections/Section";
 import { SectionEyebrow } from "@/components/design-system/sections/SectionEyebrow";
@@ -7,10 +6,10 @@ import { Typography } from "@/components/design-system/typography/Typography";
 import { RevealOnScroll } from "@/components/home/RevealOnScroll";
 import { SITE_LINKS } from "@/lib/site-links";
 
-const MODULES = [
+const SUPPORTS = [
   {
-    title: "Destiny Helper",
-    copy: "Community-driven LIVE box competition.",
+    title: "Entertainment & community",
+    copy: "LIVE interaction, energy and participation — including Destiny Helper as part of the show.",
   },
   {
     title: "TikTok growth",
@@ -18,7 +17,7 @@ const MODULES = [
   },
   {
     title: "TikTok monetisation",
-    copy: "Education around understanding opportunities to monetise on TikTok.",
+    copy: "Understanding opportunities to monetise on TikTok.",
   },
 ] as const;
 
@@ -33,30 +32,29 @@ export function DailyLive() {
       <ContentContainer>
         <RevealOnScroll>
           <div className="max-w-3xl">
-            <SectionEyebrow>Daily on TikTok LIVE</SectionEyebrow>
-            <Typography role="display-md" className="mt-5 text-gj-foreground">
-              Live with Ghanaba Joey
+            <SectionEyebrow>Inside the daily LIVE</SectionEyebrow>
+            <Typography role="heading-xl" className="mt-5 text-gj-foreground">
+              Play. Learn. Grow.
             </Typography>
-            <p className="gj-label mt-4 text-gj-gold">Every day • 2:00 PM UK</p>
-            <p className="gj-heading-md mt-6 text-gj-foreground">Play. Learn. Grow.</p>
-            <p className="gj-body-lg mt-5 text-gj-foreground-muted">
-              The Daily LIVE combines entertainment, community interaction, Destiny
-              Helper and practical education around TikTok growth and monetisation.
+            <p className="gj-body-lg mt-6 text-gj-foreground-muted">
+              Beyond the ecosystem entry points, the Daily LIVE is where entertainment,
+              education and community come together — with room to participate, not just
+              watch.
             </p>
           </div>
 
-          <div className="home-live-modules mt-12">
-            {MODULES.map((mod) => (
-              <GlassPanel key={mod.title} variant="subtle" className="p-6 sm:p-7">
-                <h3 className="gj-heading-md text-gj-foreground">{mod.title}</h3>
-                <p className="gj-body-sm mt-3 text-gj-foreground-muted">{mod.copy}</p>
-              </GlassPanel>
+          <ul className="mt-12 space-y-8 border-t border-gj-border-subtle pt-10">
+            {SUPPORTS.map((item) => (
+              <li key={item.title} className="max-w-2xl">
+                <h3 className="gj-heading-md text-gj-foreground">{item.title}</h3>
+                <p className="gj-body mt-2 text-gj-foreground-muted">{item.copy}</p>
+              </li>
             ))}
-          </div>
+          </ul>
 
           <div className="mt-10">
-            <Button href={SITE_LINKS.tiktokProfile} external variant="primary">
-              Join the live
+            <Button href={SITE_LINKS.tiktokProfile} external variant="outline">
+              Join the live on TikTok
             </Button>
           </div>
         </RevealOnScroll>

@@ -7,7 +7,7 @@ Creator • Host • Entrepreneur
 
 ## Core positioning
 
-> Creating experiences. Educating creators. Building opportunities.
+> Creating experiences. Building community. Creating opportunities.
 
 ## Brand pillars
 

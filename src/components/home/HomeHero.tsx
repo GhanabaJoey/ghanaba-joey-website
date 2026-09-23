@@ -23,17 +23,24 @@ export function HomeHero() {
             Ghanaba Joey
           </Typography>
 
-          <p className="gj-body-lg mt-8 max-w-md text-gj-foreground-muted">
+          <p className="gj-body-lg mt-8 max-w-md text-gj-foreground">
             Creating experiences.
             <br />
-            Educating creators.
+            Building community.
             <br />
-            Building opportunities.
+            Creating opportunities.
+          </p>
+
+          <p className="gj-body mt-6 max-w-lg text-gj-foreground-muted">
+            I&apos;m Ghanaba Joey — a creator, host and entrepreneur building experiences
+            that bring creators and communities together. From LIVE entertainment and
+            creator competitions to community and brand partnerships, everything I build
+            is about creating places where people can connect, participate and grow.
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button href="/#live" variant="primary">
-              Explore the world
+            <Button href="/#ecosystem" variant="primary">
+              Explore the ecosystem
             </Button>
             <Button href="/#work-with-me" variant="outline">
               Work with me

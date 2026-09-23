@@ -1,10 +1,9 @@
-import { Button } from "@/components/design-system/buttons/Button";
 import { ContentContainer } from "@/components/design-system/layout/ContentContainer";
 import { Section } from "@/components/design-system/sections/Section";
-import { SectionCTA } from "@/components/design-system/sections/SectionCTA";
 import { Typography } from "@/components/design-system/typography/Typography";
 import { RevealOnScroll } from "@/components/home/RevealOnScroll";
 import { SITE_LINKS } from "@/lib/site-links";
+import { Button } from "@/components/design-system/buttons/Button";
 
 const OPPORTUNITIES = [
   "Advertise with me",
@@ -18,35 +17,35 @@ export function WorkWithMe() {
   return (
     <Section
       id="work-with-me"
-      spacing="lg"
-      tone="commercial"
+      spacing="default"
       className="scroll-mt-24 border-t border-gj-border-subtle"
     >
       <ContentContainer>
         <RevealOnScroll>
-          <Typography role="display-md" className="text-gj-foreground">
-            Let&apos;s build something.
+          <Typography role="heading-lg" className="text-gj-foreground">
+            Work with me
           </Typography>
+          <p className="gj-body mt-3 max-w-xl text-gj-foreground-muted">
+            Campaigns, digital projects, LIVE activations and partnerships — reach out to
+            start a conversation.
+          </p>
 
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:max-w-3xl">
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
             {OPPORTUNITIES.map((item) => (
-              <li
-                key={item}
-                className="gj-body border-b border-gj-border-subtle pb-3 text-gj-foreground-muted"
-              >
+              <li key={item} className="gj-body-sm text-gj-foreground-subtle">
                 {item}
               </li>
             ))}
           </ul>
 
-          <SectionCTA>
-            <Button href="/#work-with-me" variant="primary">
-              Work with me
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Button href="/#brands" variant="outline" size="sm">
+              For brands
             </Button>
-            <Button href={SITE_LINKS.tiktokProfile} external variant="ghost">
-              Contact
+            <Button href={SITE_LINKS.tiktokProfile} external variant="ghost" size="sm">
+              Contact on TikTok
             </Button>
-          </SectionCTA>
+          </div>
         </RevealOnScroll>
       </ContentContainer>
     </Section>

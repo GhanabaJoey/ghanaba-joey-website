@@ -1,30 +1,28 @@
 import type { Metadata } from "next";
 import { SiteNavFoundation } from "@/components/design-system/navigation/SiteNavFoundation";
-import { AdvertiseSection } from "@/components/home/AdvertiseSection";
 import { BrandIntro } from "@/components/home/BrandIntro";
+import { BrandsTogetherSection } from "@/components/home/BrandsTogetherSection";
+import { BuiltForCreators } from "@/components/home/BuiltForCreators";
 import { DailyLive } from "@/components/home/DailyLive";
-import { DestinyHelperSection } from "@/components/home/DestinyHelperSection";
-import { ExperienceSplit } from "@/components/home/ExperienceSplit";
+import { EcosystemSection } from "@/components/home/EcosystemSection";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { HomeFooter } from "@/components/home/HomeFooter";
 import { HomeHero } from "@/components/home/HomeHero";
-import { MonthlyBoxGames } from "@/components/home/MonthlyBoxGames";
+import { MeetGhanabaJoey } from "@/components/home/MeetGhanabaJoey";
 import { NextWaveSection } from "@/components/home/NextWaveSection";
-import { Pillars } from "@/components/home/Pillars";
-import { SelectedWork } from "@/components/home/SelectedWork";
-import { SocialSection } from "@/components/home/SocialSection";
 import { WebsiteDevelopmentSection } from "@/components/home/WebsiteDevelopmentSection";
+import { WhereDoYouFitIn } from "@/components/home/WhereDoYouFitIn";
 import { WorkWithMe } from "@/components/home/WorkWithMe";
 import { HOME_NAV_CTA, HOME_PRIMARY_NAV } from "@/lib/navigation-config";
 
 export const metadata: Metadata = {
   title: "Ghanaba Joey | Creator • Host • Entrepreneur",
   description:
-    "Premium digital headquarters for Ghanaba Joey — TikTok LIVE, creator education, Destiny Helper, Official Monthly Box Games, NextWave Creator Network and digital projects for brands and businesses.",
+    "Creating experiences. Building community. Creating opportunities. A creator ecosystem — Daily LIVE, Destiny Helper, Box Games, NextWave and partnerships for brands and businesses.",
   openGraph: {
     title: "Ghanaba Joey | Creator • Host • Entrepreneur",
     description:
-      "Creating experiences. Educating creators. Building opportunities. LIVE daily, community events, NextWave and digital work.",
+      "More than content — an ecosystem for creators, LIVE entertainment, community and opportunities.",
     type: "website",
   },
 };
@@ -36,17 +34,15 @@ export default function HomePage() {
       <main>
         <HomeHero />
         <BrandIntro />
-        <Pillars />
+        <EcosystemSection />
+        <BuiltForCreators />
         <DailyLive />
-        <DestinyHelperSection />
-        <MonthlyBoxGames />
-        <ExperienceSplit />
         <NextWaveSection />
-        <AdvertiseSection />
+        <BrandsTogetherSection />
         <WebsiteDevelopmentSection />
-        <SelectedWork />
+        <MeetGhanabaJoey />
+        <WhereDoYouFitIn />
         <WorkWithMe />
-        <SocialSection />
         <FinalCTA />
       </main>
       <HomeFooter />

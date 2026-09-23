@@ -95,7 +95,31 @@
 
 @media (min-width: 768px) {
   .home-live-modules {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.home-ecosystem {
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .home-ecosystem {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+}
+
+.home-pathways {
+  display: grid;
+  gap: 0;
+}
+
+@media (min-width: 1024px) {
+  .home-pathways {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
   }
 }
 

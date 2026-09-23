@@ -11,13 +11,14 @@ export function HomeFooter() {
     <footer id="contact" className="scroll-mt-24 border-t border-gj-border-subtle py-14 sm:py-16">
       <ContentContainer>
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-xs">
+          <div className="max-w-sm">
             <p className="gj-label text-gj-gold">Ghanaba Joey</p>
-            <p className="gj-body-sm mt-3 text-gj-foreground-muted">
-              Creator • Host • Entrepreneur
-            </p>
-            <p className="gj-caption mt-4">
-              Creating experiences. Educating creators. Building opportunities.
+            <p className="gj-body-sm mt-4 text-gj-foreground-muted">
+              Creating experiences.
+              <br />
+              Building community.
+              <br />
+              Creating opportunities.
             </p>
           </div>
 
@@ -59,15 +60,15 @@ export function HomeFooter() {
               TikTok
             </a>
             <a
-              href={SITE_LINKS.nextwave}
+              href={SITE_LINKS.tiktokProfile}
               target="_blank"
               rel="noopener noreferrer"
               className="gj-focus-ring gj-caption hover:text-gj-gold"
             >
-              NextWave
+              Contact
             </a>
           </div>
-          <p className="gj-caption">© {new Date().getFullYear()} Ghanaba Joey. All rights reserved.</p>
+          <p className="gj-caption">© 2026 Ghanaba Joey</p>
         </div>
       </ContentContainer>
     </footer>

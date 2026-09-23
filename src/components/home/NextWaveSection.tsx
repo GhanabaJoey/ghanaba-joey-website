@@ -9,21 +9,20 @@ import { SITE_LINKS } from "@/lib/site-links";
 export function NextWaveSection() {
   return (
     <Section
-      id="nextwave"
-      spacing="lg"
+      id="nextwave-detail"
+      spacing="default"
       tone="nextwave"
       className="scroll-mt-24 border-t border-gj-border-subtle"
     >
       <ContentContainer>
         <RevealOnScroll>
-          <Typography role="display-md" className="text-gj-foreground">
+          <Typography role="heading-xl" className="text-gj-foreground">
             NextWave Creator Network
           </Typography>
-          <p className="gj-label mt-5 text-gj-gold">Stream • Compete • Win • Grow</p>
+          <p className="gj-label mt-4 text-gj-gold">Stream • Compete • Win • Grow</p>
           <p className="gj-body-lg mt-6 max-w-2xl text-gj-foreground-muted">
-            NextWave is Ghanaba Joey&apos;s creator network — built around helping creators
-            develop their LIVE presence, connect with opportunities and grow. Explore
-            NextWave on its own site; this is your introduction from the personal brand.
+            Where creators connect — a network built around LIVE presence, collaboration
+            and growth. Explore the full NextWave experience on its dedicated site.
           </p>
 
           <SectionCTA>

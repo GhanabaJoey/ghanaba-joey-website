@@ -4,28 +4,25 @@ import { ContentContainer } from "@/components/design-system/layout/ContentConta
 import { RevealOnScroll } from "@/components/home/RevealOnScroll";
 import { SITE_LINKS } from "@/lib/site-links";
 
-const WORDS = ["Create", "Connect", "Build", "Grow"] as const;
-
 export function FinalCTA() {
   return (
     <section className="home-final-cta relative scroll-mt-24 border-t border-gj-border-subtle">
       <AmbientBackground variant="gold" noise className="opacity-80" />
       <ContentContainer>
         <RevealOnScroll>
-          <div className="home-final-cta__words text-gj-foreground">
-            {WORDS.map((word) => (
-              <span key={word}>{word}</span>
-            ))}
-          </div>
-          <p className="gj-body-lg mx-auto mt-8 max-w-lg text-gj-foreground-muted">
-            Welcome to the world of Ghanaba Joey.
+          <p className="gj-display-md text-center text-gj-foreground">
+            Creating experiences.
+            <span className="mt-2 block text-gj-gold">Building community. Creating opportunities.</span>
+          </p>
+          <p className="gj-body-lg mx-auto mt-8 max-w-lg text-center text-gj-foreground-muted">
+            Welcome to the world of Ghanaba Joey — find your place in the ecosystem.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button href={SITE_LINKS.tiktokProfile} external variant="primary">
               Follow the journey
             </Button>
-            <Button href="/#work-with-me" variant="outline">
-              Work with me
+            <Button href="/#pathways" variant="outline">
+              Where do you fit in?
             </Button>
           </div>
         </RevealOnScroll>
